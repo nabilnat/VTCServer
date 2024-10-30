@@ -11,7 +11,4 @@ Route::get('/user', function (Request $request) {
 Route::post('/register',  [UserController::class, 'store']);
 Route::post('/refresh-token', [UserController::class, 'refresh']);
 
-Route::post('/login',  function (Request $request) {
-    return "hello world";}
-
-);
+Route::post('/login',  [UserController::class, 'index']);

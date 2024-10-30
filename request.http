@@ -17,7 +17,6 @@ POST  http://127.0.0.1:8000/api/login
 content-type: application/json
 
 {
-    "name":"nabil",
     "email":"taabane.amar@gmail.com",
     "password":"nabil"
 }

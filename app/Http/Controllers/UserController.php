@@ -63,4 +63,28 @@ class UserController extends Controller
             'token_type' => 'Bearer',
         ]);
     }
+    public function index(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string',
+        ]);
+
+        $user =User::whereEmail($request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid EmailError'], 401);
+        }
+        if (!hash::check($request->password,$user->password)) {
+            return response()->json(['message' => 'Invalid password Error'], 401);
+        }
+      
+        $accessToken = $user->createToken('access_token')->plainTextToken;
+        $refreshToken = Str::random(64);
+        $user->update(['refresh_token' => $refreshToken, 'refresh_token_expiration' => Carbon::now()->addDays(30)]);
+
+      return response()->json(['user' => $user,
+                                     'access_token' => $accessToken,
+                                     'refresh_token' => $refreshToken], 200);
+    }
 }
